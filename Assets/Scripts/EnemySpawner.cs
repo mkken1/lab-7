@@ -12,7 +12,7 @@ namespace ProjectScripts
     public class EnemySpawner : MonoBehaviour
     {
         public DirectionType spawnSide;
-        public GameObject enemyPrefab;
+        public GameObject[] EnemyPrefabs = new GameObject[2];
         public float spawnInterval = 5f;
         public int MaxEnemyHp = 1;
 
@@ -51,7 +51,8 @@ namespace ProjectScripts
 
         private void SpawnEnemy()
         {
-            GameObject enemyObj = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+            int randomObject = Random.Range(0, 2);
+            GameObject enemyObj = Instantiate(EnemyPrefabs[randomObject], transform.position, Quaternion.identity);
             Enemy enemy = enemyObj.GetComponent<Enemy>();
             enemy.MaxHp = MaxEnemyHp;
             enemy.CurrentHp = enemy.MaxHp;
