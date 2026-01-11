@@ -1,5 +1,6 @@
+using System.Collections;
+using System.Linq;
 using UnityEngine;
-using System.Collections.Generic;
 
 
 namespace ProjectScripts
@@ -21,14 +22,17 @@ namespace ProjectScripts
         public SpriteRenderer SpriteRenderer;
         public PlayerResources PlayerResources;
 
-        [System.Obsolete]
+        private bool _isUpgradable = true;
+
         void Start()
         {
             rb = GetComponent<Rigidbody2D>();
             SpriteRenderer = GetComponent<SpriteRenderer>();
             PlayerResources = GetComponent<PlayerResources>();
-            
-            Barricade[] barricades = FindObjectsOfType<Barricade>();
+
+            var barricadesObjects = GameObject.FindGameObjectsWithTag("Barricade");
+            Barricade[] barricades = barricadesObjects.Select(b => b.GetComponent<Barricade>()).ToArray();
+
             foreach (var barricade in barricades)
             {
                 barricade.InitializePlayerInteraction(this);
@@ -47,6 +51,12 @@ namespace ProjectScripts
             {
                 rb.AddForce(new Vector2(0f, JumpForce), ForceMode2D.Impulse);
                 isGrounded = false;
+            }
+
+            if (_isUpgradable)
+            {
+                StartCoroutine(UpgradeCoroutine());
+                Debug.Log("Вы стали быстрее");
             }
         }
 
@@ -90,5 +100,14 @@ namespace ProjectScripts
                 Debug.Log($"Потрачено {amount} {resourceType}. Осталось: {PlayerResources.Resources[resourceType]}");
             }
         }
-    }    
+
+
+        private IEnumerator UpgradeCoroutine()
+        {
+            _isUpgradable = false;
+            MoveSpeed += 0.1f;
+            yield return new WaitForSeconds(20f);
+            _isUpgradable = true;
+        }
+    }
 }

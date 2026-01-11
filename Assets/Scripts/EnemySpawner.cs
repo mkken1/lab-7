@@ -20,14 +20,15 @@ namespace ProjectScripts
 
         void Start()
         {
-            StartCoroutine(SpawnRoutine());
+            Invoke("SpawnEnemy", spawnInterval);
         }
 
         void Update()
         {
             if (_isUpgradable)
-            {    
+            {
                 StartCoroutine(UpgradeEnemy());
+                Debug.Log("Басурманы стали сильнее");
             }
         }
 
@@ -57,7 +58,7 @@ namespace ProjectScripts
 
             if (enemy != null)
             {
-                enemy.spawnSide = spawnSide; 
+                enemy.spawnSide = spawnSide;
             }
         }
     }

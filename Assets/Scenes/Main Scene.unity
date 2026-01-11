@@ -608,10 +608,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad40a3d22d32945758b7fe7edf6b907c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FarmSpotAction
-  resourceType: 0
-  isInHarvestZone: 0
-  harvestInterval: 3
-  resourceAmount: 5
+  ResourceTypee: 0
+  IsInHarvestZone: 0
+  HarvestInterval: 3
+  ResourceAmount: 0
 --- !u!1 &246109682
 GameObject:
   m_ObjectHideFlags: 0
@@ -1001,10 +1001,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad40a3d22d32945758b7fe7edf6b907c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  resourceType: 1
-  isInHarvestZone: 0
-  harvestInterval: 3
-  resourceAmount: 3
+  ResourceTypee: 1
+  IsInHarvestZone: 0
+  HarvestInterval: 3
+  ResourceAmount: 0
 --- !u!61 &508045038
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3918,6 +3918,10 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4659374181815628525, guid: 78c3519eaf08290caa344cef33bd375d, type: 3}
+      propertyPath: MoveSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659374181815628525, guid: 78c3519eaf08290caa344cef33bd375d, type: 3}
       propertyPath: isGrounded
       value: 0
       objectReference: {fileID: 0}
@@ -3925,6 +3929,10 @@ PrefabInstance:
       propertyPath: SpriteRenderer
       value: 
       objectReference: {fileID: 1670437947}
+    - target: {fileID: 4659374181815628525, guid: 78c3519eaf08290caa344cef33bd375d, type: 3}
+      propertyPath: PlayerResources
+      value: 
+      objectReference: {fileID: 1670437943}
     - target: {fileID: 4659374181815628525, guid: 78c3519eaf08290caa344cef33bd375d, type: 3}
       propertyPath: PlayerTransform
       value: 

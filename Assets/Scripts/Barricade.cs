@@ -24,11 +24,10 @@ namespace ProjectScripts
             if (_mainCollider == null) _mainCollider = GetComponent<Collider2D>();
             if (_repairTrigger == null) _repairTrigger = GetComponent<Collider2D>();
             if (_spriteRenderer == null) _spriteRenderer = GetComponent<SpriteRenderer>();
-            
-            // Настраиваем триггер для починки
+
             _repairTrigger.isTrigger = true;
-            _repairTrigger.enabled = false; // Изначально отключен
-            
+            _repairTrigger.enabled = false;
+
             SetupInitialState();
         }
 
@@ -36,18 +35,15 @@ namespace ProjectScripts
         {
             _isBroken = false;
             _currentHealth = _maxHealth;
-            
-            // Целая баррикада: белая, блокирует врагов
+
             _spriteRenderer.color = Color.white;
             _mainCollider.enabled = true;
-            
-            // Отключаем триггер починки
+
             _repairTrigger.enabled = false;
         }
 
         public void InitializePlayerInteraction(PlayerController player)
         {
-            // Игрок ВСЕГДА проходит сквозь основной коллайдер баррикады
             Physics2D.IgnoreCollision(
                 player.GetComponent<Collider2D>(),
                 _mainCollider,
@@ -71,13 +67,11 @@ namespace ProjectScripts
             if (other.CompareTag("Player"))
             {
                 PlayerController player = other.GetComponent<PlayerController>();
-                
-                // Проверяем именно этого игрока
+
                 if (player == _playerInRange)
                 {
                     _playerInRange = null;
-                    
-                    // Прерываем починку только если она была начата
+
                     if (_rebuildCoroutine != null)
                     {
                         StopCoroutine(_rebuildCoroutine);
@@ -96,7 +90,6 @@ namespace ProjectScripts
                 {
                     if (_rebuildCoroutine == null)
                     {
-                        // Добавляем проверку на null перед запуском корутины
                         if (_playerInRange != null)
                         {
                             Debug.Log("Начата починка баррикады...");
@@ -126,7 +119,7 @@ namespace ProjectScripts
             yield return new WaitForSeconds(3f);
 
             PlayerController currentPlayer = _playerInRange;
-            
+
             if (_isBroken && _playerInRange != null && _playerInRange.HasEnoughResources(5, "Wood")
                         && _playerInRange.HasEnoughResources(3, "Stone"))
             {
@@ -139,23 +132,23 @@ namespace ProjectScripts
             {
                 Debug.LogWarning("Починка не завершена - недостаточно ресурсов или игрок ушел");
             }
-            
+
             _rebuildCoroutine = null;
         }
 
         private void RebuildBarricade()
         {
             _playerInRange = null;
-            
+
             _isBroken = false;
             _currentHealth = _maxHealth;
-            
+
             _spriteRenderer.color = Color.white;
-            
+
             _mainCollider.enabled = true;
-            
+
             _repairTrigger.enabled = false;
-            
+
             Debug.Log("Баррикада восстановлена!");
         }
 
@@ -190,10 +183,10 @@ namespace ProjectScripts
         public void TakeDamage(int damage = 1)
         {
             if (!IsAlive()) return;
-            
+
             _currentHealth -= damage;
             Debug.Log($"Баррикада получила урон! Здоровье: {_currentHealth}/{_maxHealth}");
-            
+
             if (_currentHealth <= 0)
             {
                 BreakBarricade();
@@ -203,19 +196,16 @@ namespace ProjectScripts
         public void BreakBarricade()
         {
             if (_isBroken) return;
-            
+
             _isBroken = true;
             _currentHealth = 0;
-            
-            // Меняем визуальное состояние на серый
+
             _spriteRenderer.color = Color.gray;
-            
-            // Отключаем основной коллайдер (все проходят сквозь)
+
             _mainCollider.enabled = false;
-            
-            // Включаем триггер для починки
+
             _repairTrigger.enabled = true;
-            
+
             Debug.Log("Баррикада разрушена – теперь её можно починить");
         }
     }

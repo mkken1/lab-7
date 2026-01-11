@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace ProjectScripts
@@ -19,10 +20,10 @@ namespace ProjectScripts
         public int MaxHp = 2;
         public int CurrentHp;
 
-        [Obsolete]
         void Awake()
         {
-            Enemy[] enemies = FindObjectsOfType<Enemy>();
+            GameObject[] enemiesObjects = GameObject.FindGameObjectsWithTag("Enemy");
+            Enemy[] enemies = enemiesObjects.Select(e => e.GetComponent<Enemy>()).ToArray();
             foreach (var e in enemies)
             {
                 Collider2D playerCol = GetComponent<Collider2D>();
@@ -59,7 +60,7 @@ namespace ProjectScripts
             }
         }
         private void OnCollisionStay2D(Collision2D collision)
-        { 
+        {
             if (collision.gameObject.CompareTag("Barricade"))
             {
                 Barricade barricade = collision.gameObject.GetComponent<Barricade>();

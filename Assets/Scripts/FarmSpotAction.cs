@@ -6,10 +6,12 @@ namespace ProjectScripts
 {
     public class FarmSpotAction : MonoBehaviour
     {
-        public ResourceType resourceType = ResourceType.Wood;
-        public bool isInHarvestZone = false;
-        public float harvestInterval = 3f;
-        public uint resourceAmount;
+        public ResourceType ResourceTypee = ResourceType.Wood;
+        public bool IsInHarvestZone = false;
+        public float HarvestInterval = 3f;
+        public uint ResourceAmount;
+
+        private bool _isUpgradable = true;
 
         public enum ResourceType
         {
@@ -20,7 +22,7 @@ namespace ProjectScripts
         void Start()
         {
 
-            resourceAmount = resourceType switch
+            ResourceAmount = ResourceTypee switch
             {
                 ResourceType.Wood => 5,
                 ResourceType.Stone => 3,
@@ -28,11 +30,20 @@ namespace ProjectScripts
             };
         }
 
+        void Update()
+        {
+            if (_isUpgradable)
+            {
+                StartCoroutine(UpgradeCoroutine());
+                Debug.Log("Фармлинги улучшены");
+            }
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Player"))
             {
-                isInHarvestZone = true;
+                IsInHarvestZone = true;
                 StartCoroutine(HarvestResources());
             }
         }
@@ -41,7 +52,7 @@ namespace ProjectScripts
         {
             if (collision.CompareTag("Player"))
             {
-                isInHarvestZone = false;
+                IsInHarvestZone = false;
                 StopAllCoroutines();
             }
         }
@@ -50,10 +61,10 @@ namespace ProjectScripts
         {
             while (true)
             {
-                yield return new WaitForSeconds(harvestInterval);
+                yield return new WaitForSeconds(HarvestInterval);
 
-                if (isInHarvestZone)
-                    CollectResources(resourceAmount);
+                if (IsInHarvestZone)
+                    CollectResources(ResourceAmount);
             }
         }
 
@@ -67,7 +78,7 @@ namespace ProjectScripts
 
                 if (playerResources != null)
                 {
-                    playerResources.AddResources(amount, resourceType.ToString());
+                    playerResources.AddResources(amount, ResourceTypee.ToString());
                 }
                 else
                 {
@@ -79,5 +90,15 @@ namespace ProjectScripts
                 Debug.LogWarning("Player not found!");
             }
         }
+
+
+        private IEnumerator UpgradeCoroutine()
+        {
+            _isUpgradable = false;
+            HarvestInterval -= 0.05f;
+            yield return new WaitForSeconds(15f);
+            _isUpgradable = true;
+        }
+
     }
 }
